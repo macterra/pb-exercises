@@ -36,15 +36,20 @@ print('EQ      ', KeyToAddr(priv2, b'\x07\x8b'))
 def int_to_bytes(x):
     return x.to_bytes((x.bit_length() + 7) // 8, 'big')
     
-def search():
+def search(target):
     for i in range(0xffffff):
         pre = i.to_bytes(3, 'big')
         addr = KeyToAddr(priv2, pre)
-        prefix = addr[:3].lower()
-        if prefix == 'eqb':
+        prefix = addr[:3]
+        if prefix == target:
             print(i, pre, addr)
+            test(pre, 20)
+        if i % 100000 == 0:
+            print(i)
 
-
-for i in range(100):
-    pk = PrivateKey(secret=10101+i)
-    print('EQ      ', KeyToAddr(pk, b'\x01\xb5\x98'))
+def test(pre, n):
+    for i in range(n):
+        pk = PrivateKey(secret=10101+i)
+        print('EQ      ', KeyToAddr(pk, pre))
+        
+search('TQc')        
